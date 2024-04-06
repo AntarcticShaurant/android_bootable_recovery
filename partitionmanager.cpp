@@ -1984,9 +1984,7 @@ void TWPartitionManager::Update_System_Details(void) {
             if ((*iter)->Mount_Point == "/boot") {
                 gui_msg("update_part_details=/boot");
                 gui_msg("update_part_details=calculating backup display size");
-                int backup_display
-
-_size = (int)((*iter)->Backup_Size / 1048576LLU);
+                int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
                 gui_msg("update_part_details=done");
                 gui_msg("update_part_details=setting backup boot size");
                 DataManager::SetValue(TW_BACKUP_BOOT_SIZE, backup_display_size);
