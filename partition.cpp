@@ -3040,9 +3040,11 @@ bool TWPartition::Restore_Image(PartitionSettings *part_settings) {
 }
 
 bool TWPartition::Update_Size(bool Display_Error) {
+	LOGINFO("inside Update_Size...");
 	bool ret = false, Was_Already_Mounted = false, ro = false;
-
+	LOGINFO("calling Find_Actual_Block_Device method");
 	Find_Actual_Block_Device();
+	LOGINFO("done");
 
 	if (Actual_Block_Device.empty())
 		return false;
