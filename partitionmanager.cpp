@@ -1873,181 +1873,188 @@ void TWPartitionManager::Update_System_Details(void) {
 	std::vector<TWPartition*>::iterator iter;
 	int data_size = 0;
 
-	gui_msg("update_part_details=Updating partition details...");
-	gui_msg("update_part_details=iterating through partitions");
-	for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
-		gui_msg("update_part_details=calling Update_Size method");
-		(*iter)->Update_Size(true);
-		gui_msg("update_part_details=back to Update_System_Details");
-		gui_msg("update_part_details=check if the partition can be mounted");
-		if ((*iter)->Can_Be_Mounted) {
-			gui_msg("update_part_details=yes");
-			gui_msg("update_part_details=where am i right now?");
-			if ((*iter)->Mount_Point == Get_Android_Root_Path()) {
-				gui_msg("update_part_details=/system_root");
-				gui_msg("update_part_details=calculating backup display size");
-				int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=setting backup system size");
-				DataManager::SetValue(TW_BACKUP_SYSTEM_SIZE, backup_display_size);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=calling Is_TWRP_App_In_System method");
-				TWFunc::Is_TWRP_App_In_System();
-				gui_msg("update_part_details=done");
-			} else if ((*iter)->Mount_Point == "/data" || (*iter)->Mount_Point == "/datadata") {
-				gui_msg("update_part_details=/data || /datadata");
-				gui_msg("update_part_details=calculating data size");
-				data_size += (int)((*iter)->Backup_Size / 1048576LLU);
-				gui_msg("update_part_details=done");
-			} else if ((*iter)->Mount_Point == "/cache") {
-				gui_msg("update_part_details=/cache");
-				gui_msg("update_part_details=calculating backup display size");
-				int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=setting backup cache size");
-				DataManager::SetValue(TW_BACKUP_CACHE_SIZE, backup_display_size);
-				gui_msg("update_part_details=done");
-			} else if ((*iter)->Mount_Point == "/sd-ext") {
-				gui_msg("update_part_details=/sd-ext");
-				gui_msg("update_part_details=calculating backup display size");
-				int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=setting backup sd-ext size");
-				DataManager::SetValue(TW_BACKUP_SDEXT_SIZE, backup_display_size);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=checking whether Backup_Size is == 0");
-				if ((*iter)->Backup_Size == 0) {
-					gui_msg("update_part_details=yes");
-					gui_msg("update_part_details=setting TW_HAS_SDEXT_PARTITION to false");
-					DataManager::SetValue(TW_HAS_SDEXT_PARTITION, 0);
-					gui_msg("update_part_details=done");
-					gui_msg("update_part_details=setting TW_BACKUP_SDEXT_VAR to false");
-					DataManager::SetValue(TW_BACKUP_SDEXT_VAR, 0);
-					gui_msg("update_part_details=done");
-				} else
-					gui_msg("update_part_details=no");
-					gui_msg("update_part_details=setting TW_HAS_SDEXT_PARTITION to true");
-					DataManager::SetValue(TW_HAS_SDEXT_PARTITION, 1);
-					gui_msg("update_part_details=done");
-			} else if ((*iter)->Has_Android_Secure) {
-				gui_msg("update_part_details=Has_Android_Secure");
-				gui_msg("update_part_details=calculating backup display size");
-				int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=setting backup andsec size");
-				DataManager::SetValue(TW_BACKUP_ANDSEC_SIZE, backup_display_size);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=checking whether Backup_Size is == 0");
-				if ((*iter)->Backup_Size == 0) {
-					gui_msg("update_part_details=yes");
-					gui_msg("update_part_details=setting TW_HAS_ANDROID_SECURE to false");
-					DataManager::SetValue(TW_HAS_ANDROID_SECURE, 0);
-					gui_msg("update_part_details=done");
-					gui_msg("update_part_details=setting TW_BACKUP_ANDSEC_VAR to false");
-					DataManager::SetValue(TW_BACKUP_ANDSEC_VAR, 0);
-					gui_msg("update_part_details=done");
-				} else
-					gui_msg("update_part_details=no");
-					gui_msg("update_part_details=setting TW_HAS_ANDROID_SECURE to true");
-					DataManager::SetValue(TW_HAS_ANDROID_SECURE, 1);
-					gui_msg("update_part_details=done");
-			} else if ((*iter)->Mount_Point == "/boot") {
-				gui_msg("update_part_details=/boot");
-				gui_msg("update_part_details=calculating backup display size");
-				int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=setting backup boot size");
-				DataManager::SetValue(TW_BACKUP_BOOT_SIZE, backup_display_size);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=checking whether Backup_Size is == 0");
-				if ((*iter)->Backup_Size == 0) {
-					gui_msg("update_part_details=yes");
-					gui_msg("update_part_details=setting tw_has_boot_partition to false");
-					DataManager::SetValue("tw_has_boot_partition", 0);
-					gui_msg("update_part_details=done");
-					gui_msg("update_part_details=setting TW_BACKUP_BOOT_VAR to false");
-					DataManager::SetValue(TW_BACKUP_BOOT_VAR, 0);
-					gui_msg("update_part_details=done");
-				} else
-					gui_msg("update_part_details=no");
-					gui_msg("update_part_details=setting tw_has_boot_partition to true");
-					DataManager::SetValue("tw_has_boot_partition", 1);
-					gui_msg("update_part_details=done");
-			}
-		} else {
-			// Handle unmountable partitions in case we reset defaults
-			gui_msg("update_part_details=no");
-			gui_msg("update_part_details=where am i right now?");
-			if ((*iter)->Mount_Point == "/boot") {
-				gui_msg("update_part_details=/boot");
-				gui_msg("update_part_details=calculating backup display size");
-				int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=setting backup boot size");
-				DataManager::SetValue(TW_BACKUP_BOOT_SIZE, backup_display_size);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=checking whether Backup_Size is == 0");
-				if ((*iter)->Backup_Size == 0) {
-					gui_msg("update_part_details=yes");
-					gui_msg("update_part_details=setting TW_HAS_BOOT_PARTITION to false");
-					DataManager::SetValue(TW_HAS_BOOT_PARTITION, 0);
-					gui_msg("update_part_details=done");
-					gui_msg("update_part_details=setting TW_BACKUP_BOOT_VAR to false");
-					DataManager::SetValue(TW_BACKUP_BOOT_VAR, 0);
-					gui_msg("update_part_details=done");
-				} else
-					gui_msg("update_part_details=no");
-					gui_msg("update_part_details=setting TW_HAS_BOOT_PARTITION to true");
-					DataManager::SetValue(TW_HAS_BOOT_PARTITION, 1);
-					gui_msg("update_part_details=done");
-			} else if ((*iter)->Mount_Point == "/recovery") {
-				gui_msg("update_part_details=/recovery");
-				gui_msg("update_part_details=calculating backup display size");
-				int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=setting backup recovery size");
-				DataManager::SetValue(TW_BACKUP_RECOVERY_SIZE, backup_display_size);
-				gui_msg("update_part_details=done");
-				gui_msg("update_part_details=checking whether Backup_Size is == 0");
-				if ((*iter)->Backup_Size == 0) {
-					gui_msg("update_part_details=yes");
-					gui_msg("update_part_details=setting TW_HAS_RECOVERY_PARTITION to false");
-					DataManager::SetValue(TW_HAS_RECOVERY_PARTITION, 0);
-					gui_msg("update_part_details=done");
-					gui_msg("update_part_details=setting TW_BACKUP_RECOVERY_VAR to false");
-					DataManager::SetValue(TW_BACKUP_RECOVERY_VAR, 0);
-					gui_msg("update_part_details=done");
-				} else
-					gui_msg("update_part_details=no");
-					gui_msg("update_part_details=setting TW_HAS_RECOVERY_PARTITION to true");
-					DataManager::SetValue(TW_HAS_RECOVERY_PARTITION, 1);
-					gui_msg("update_part_details=done");
-			} else if ((*iter)->Mount_Point == "/data") {
-				gui_msg("update_part_details=/data");
-				gui_msg("update_part_details=calculating data size");
-				data_size += (int)((*iter)->Backup_Size / 1048576LLU);
-				gui_msg("update_part_details=done");
-			}
-		}
-	}
-	gui_msg("update_part_details_done=done updating partition details");
-	DataManager::SetValue(TW_BACKUP_DATA_SIZE, data_size);
-	string current_storage_path = DataManager::GetCurrentStoragePath();
-	TWPartition* FreeStorage = Find_Partition_By_Path(current_storage_path);
-	if (FreeStorage != NULL) {
-		// Attempt to mount storage
-		if (!FreeStorage->Mount(false)) {
-			gui_msg(Msg(msg::kWarning, "unable_to_mount_storage=Unable to mount storage"));
-			DataManager::SetValue(TW_STORAGE_FREE_SIZE, 0);
-		} else {
-			DataManager::SetValue(TW_STORAGE_FREE_SIZE, (int)(FreeStorage->Free / 1048576LLU));
-		}
-	} else {
-		LOGINFO("Unable to find storage partition '%s'.\n", current_storage_path.c_str());
-	}
-	if (!Write_Fstab())
-		LOGERR("Error creating fstab\n");
-	return;
+    gui_msg("update_part_details=Updating partition details...");
+    gui_msg("update_part_details=iterating through partitions");
+    for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
+        gui_msg("update_part_details=calling Update_Size method");
+        (*iter)->Update_Size(true);
+        gui_msg("update_part_details=back to Update_System_Details");
+        gui_msg("update_part_details=check if the partition can be mounted");
+        if ((*iter)->Can_Be_Mounted) {
+            gui_msg("update_part_details=yes");
+            gui_msg("update_part_details=where am i right now?");
+            if ((*iter)->Mount_Point == Get_Android_Root_Path()) {
+                gui_msg("update_part_details=/system_root");
+                gui_msg("update_part_details=calculating backup display size");
+                int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=setting backup system size");
+                DataManager::SetValue(TW_BACKUP_SYSTEM_SIZE, backup_display_size);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=calling Is_TWRP_App_In_System method");
+                TWFunc::Is_TWRP_App_In_System();
+                gui_msg("update_part_details=done");
+            } else if ((*iter)->Mount_Point == "/data" || (*iter)->Mount_Point == "/datadata") {
+                gui_msg("update_part_details=/data || /datadata");
+                gui_msg("update_part_details=calculating data size");
+                data_size += (int)((*iter)->Backup_Size / 1048576LLU);
+                gui_msg("update_part_details=done");
+            } else if ((*iter)->Mount_Point == "/cache") {
+                gui_msg("update_part_details=/cache");
+                gui_msg("update_part_details=calculating backup display size");
+                int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=setting backup cache size");
+                DataManager::SetValue(TW_BACKUP_CACHE_SIZE, backup_display_size);
+                gui_msg("update_part_details=done");
+            } else if ((*iter)->Mount_Point == "/sd-ext") {
+                gui_msg("update_part_details=/sd-ext");
+                gui_msg("update_part_details=calculating backup display size");
+                int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=setting backup sd-ext size");
+                DataManager::SetValue(TW_BACKUP_SDEXT_SIZE, backup_display_size);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=checking whether Backup_Size is == 0");
+                if ((*iter)->Backup_Size == 0) {
+                    gui_msg("update_part_details=yes");
+                    gui_msg("update_part_details=setting TW_HAS_SDEXT_PARTITION to false");
+                    DataManager::SetValue(TW_HAS_SDEXT_PARTITION, 0);
+                    gui_msg("update_part_details=done");
+                    gui_msg("update_part_details=setting TW_BACKUP_SDEXT_VAR to false");
+                    DataManager::SetValue(TW_BACKUP_SDEXT_VAR, 0);
+                    gui_msg("update_part_details=done");
+                } else {
+                    gui_msg("update_part_details=no");
+                    gui_msg("update_part_details=setting TW_HAS_SDEXT_PARTITION to true");
+                    DataManager::SetValue(TW_HAS_SDEXT_PARTITION, 1);
+                    gui_msg("update_part_details=done");
+                }
+            } else if ((*iter)->Has_Android_Secure) {
+                gui_msg("update_part_details=Has_Android_Secure");
+                gui_msg("update_part_details=calculating backup display size");
+                int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=setting backup andsec size");
+                DataManager::SetValue(TW_BACKUP_ANDSEC_SIZE, backup_display_size);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=checking whether Backup_Size is == 0");
+                if ((*iter)->Backup_Size == 0) {
+                    gui_msg("update_part_details=yes");
+                    gui_msg("update_part_details=setting TW_HAS_ANDROID_SECURE to false");
+                    DataManager::SetValue(TW_HAS_ANDROID_SECURE, 0);
+                    gui_msg("update_part_details=done");
+                    gui_msg("update_part_details=setting TW_BACKUP_ANDSEC_VAR to false");
+                    DataManager::SetValue(TW_BACKUP_ANDSEC_VAR, 0);
+                    gui_msg("update_part_details=done");
+                } else {
+                    gui_msg("update_part_details=no");
+                    gui_msg("update_part_details=setting TW_HAS_ANDROID_SECURE to true");
+                    DataManager::SetValue(TW_HAS_ANDROID_SECURE, 1);
+                    gui_msg("update_part_details=done");
+                }
+            } else if ((*iter)->Mount_Point == "/boot") {
+                gui_msg("update_part_details=/boot");
+                gui_msg("update_part_details=calculating backup display size");
+                int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=setting backup boot size");
+                DataManager::SetValue(TW_BACKUP_BOOT_SIZE, backup_display_size);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=checking whether Backup_Size is == 0");
+                if ((*iter)->Backup_Size == 0) {
+                    gui_msg("update_part_details=yes");
+                    gui_msg("update_part_details=setting tw_has_boot_partition to false");
+                    DataManager::SetValue("tw_has_boot_partition", 0);
+                    gui_msg("update_part_details=done");
+                    gui_msg("update_part_details=setting TW_BACKUP_BOOT_VAR to false");
+                    DataManager::SetValue(TW_BACKUP_BOOT_VAR, 0);
+                    gui_msg("update_part_details=done");
+                } else {
+                    gui_msg("update_part_details=no");
+                    gui_msg("update_part_details=setting tw_has_boot_partition to true");
+                    DataManager::SetValue("tw_has_boot_partition", 1);
+                    gui_msg("update_part_details=done");
+                }
+            }
+        } else {
+            // Handle unmountable partitions in case we reset defaults
+            gui_msg("update_part_details=no");
+            gui_msg("update_part_details=where am i right now?");
+            if ((*iter)->Mount_Point == "/boot") {
+                gui_msg("update_part_details=/boot");
+                gui_msg("update_part_details=calculating backup display size");
+                int backup_display
+
+_size = (int)((*iter)->Backup_Size / 1048576LLU);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=setting backup boot size");
+                DataManager::SetValue(TW_BACKUP_BOOT_SIZE, backup_display_size);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=checking whether Backup_Size is == 0");
+                if ((*iter)->Backup_Size == 0) {
+                    gui_msg("update_part_details=yes");
+                    gui_msg("update_part_details=setting TW_HAS_BOOT_PARTITION to false");
+                    DataManager::SetValue(TW_HAS_BOOT_PARTITION, 0);
+                    gui_msg("update_part_details=done");
+                    gui_msg("update_part_details=setting TW_BACKUP_BOOT_VAR to false");
+                    DataManager::SetValue(TW_BACKUP_BOOT_VAR, 0);
+                    gui_msg("update_part_details=done");
+                } else {
+                    gui_msg("update_part_details=no");
+                    gui_msg("update_part_details=setting TW_HAS_BOOT_PARTITION to true");
+                    DataManager::SetValue(TW_HAS_BOOT_PARTITION, 1);
+                    gui_msg("update_part_details=done");
+                }
+            } else if ((*iter)->Mount_Point == "/recovery") {
+                gui_msg("update_part_details=/recovery");
+                gui_msg("update_part_details=calculating backup display size");
+                int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=setting backup recovery size");
+                DataManager::SetValue(TW_BACKUP_RECOVERY_SIZE, backup_display_size);
+                gui_msg("update_part_details=done");
+                gui_msg("update_part_details=checking whether Backup_Size is == 0");
+                if ((*iter)->Backup_Size == 0) {
+                    gui_msg("update_part_details=yes");
+                    gui_msg("update_part_details=setting TW_HAS_RECOVERY_PARTITION to false");
+                    DataManager::SetValue(TW_HAS_RECOVERY_PARTITION, 0);
+                    gui_msg("update_part_details=done");
+                    gui_msg("update_part_details=setting TW_BACKUP_RECOVERY_VAR to false");
+                    DataManager::SetValue(TW_BACKUP_RECOVERY_VAR, 0);
+                    gui_msg("update_part_details=done");
+                } else {
+                    gui_msg("update_part_details=no");
+                    gui_msg("update_part_details=setting TW_HAS_RECOVERY_PARTITION to true");
+                    DataManager::SetValue(TW_HAS_RECOVERY_PARTITION, 1);
+                    gui_msg("update_part_details=done");
+                }
+            } else if ((*iter)->Mount_Point == "/data") {
+                gui_msg("update_part_details=/data");
+                gui_msg("update_part_details=calculating data size");
+                data_size += (int)((*iter)->Backup_Size / 1048576LLU);
+                gui_msg("update_part_details=done");
+            }
+        }
+    }
+    gui_msg("update_part_details_done=done updating partition details");
+    DataManager::SetValue(TW_BACKUP_DATA_SIZE, data_size);
+    string current_storage_path = DataManager::GetCurrentStoragePath();
+    TWPartition* FreeStorage = Find_Partition_By_Path(current_storage_path);
+    if (FreeStorage != NULL) {
+        // Attempt to mount storage
+        if (!FreeStorage->Mount(false)) {
+            gui_msg(Msg(msg::kWarning, "unable_to_mount_storage=Unable to mount storage"));
+            DataManager::SetValue(TW_STORAGE_FREE_SIZE, 0);
+        } else {
+            DataManager::SetValue(TW_STORAGE_FREE_SIZE, (int)(FreeStorage->Free / 1048576LLU));
+        }
+    } else {
+        LOGINFO("Unable to find storage partition '%s'.\n", current_storage_path.c_str());
+    }
+    if (!Write_Fstab())
+        LOGERR("Error creating fstab\n");
+    return;
 }
 
 void TWPartitionManager::Post_Decrypt(const string& Block_Device) {
