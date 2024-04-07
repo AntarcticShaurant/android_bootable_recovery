@@ -1874,164 +1874,164 @@ void TWPartitionManager::Update_System_Details(void) {
 	int data_size = 0;
 
     gui_msg("update_part_details=Updating partition details...");
-    LOGINFO("iterating through partitions");
+    gui_msg(Msg("iterating through partitions"));
     for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
-        LOGINFO("calling Update_Size method");
+        gui_msg(Msg("calling Update_Size method"));
         (*iter)->Update_Size(true);
-        LOGINFO("back to Update_System_Details");
-        LOGINFO("check if the partition can be mounted");
+        gui_msg(Msg("back to Update_System_Details"));
+        gui_msg(Msg("check if the partition can be mounted"));
         if ((*iter)->Can_Be_Mounted) {
-            LOGINFO("yes");
-            LOGINFO("where am i right now?");
+            gui_msg(Msg("yes"));
+            gui_msg(Msg("where am i right now?"));
             if ((*iter)->Mount_Point == Get_Android_Root_Path()) {
-                LOGINFO("/system_root");
-                LOGINFO("calculating backup display size");
+                gui_msg(Msg("/system_root"));
+                gui_msg(Msg("calculating backup display size"));
                 int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-                LOGINFO("done");
-                LOGINFO("setting backup system size");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("setting backup system size"));
                 DataManager::SetValue(TW_BACKUP_SYSTEM_SIZE, backup_display_size);
-                LOGINFO("done");
-                LOGINFO("calling Is_TWRP_App_In_System method");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("calling Is_TWRP_App_In_System method"));
                 TWFunc::Is_TWRP_App_In_System();
-                LOGINFO("done");
+                gui_msg(Msg("done"));
             } else if ((*iter)->Mount_Point == "/data" || (*iter)->Mount_Point == "/datadata") {
-                LOGINFO("/data || /datadata");
-                LOGINFO("calculating data size");
+                gui_msg(Msg("/data || /datadata"));
+                gui_msg(Msg("calculating data size"));
                 data_size += (int)((*iter)->Backup_Size / 1048576LLU);
-                LOGINFO("done");
+                gui_msg(Msg("done"));
             } else if ((*iter)->Mount_Point == "/cache") {
-                LOGINFO("/cache");
-                LOGINFO("calculating backup display size");
+                gui_msg(Msg("/cache"));
+                gui_msg(Msg("calculating backup display size"));
                 int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-                LOGINFO("done");
-                LOGINFO("setting backup cache size");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("setting backup cache size"));
                 DataManager::SetValue(TW_BACKUP_CACHE_SIZE, backup_display_size);
-                LOGINFO("done");
+                gui_msg(Msg("done"));
             } else if ((*iter)->Mount_Point == "/sd-ext") {
-                LOGINFO("/sd-ext");
-                LOGINFO("calculating backup display size");
+                gui_msg(Msg("/sd-ext"));
+                gui_msg(Msg("calculating backup display size"));
                 int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-                LOGINFO("done");
-                LOGINFO("setting backup sd-ext size");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("setting backup sd-ext size"));
                 DataManager::SetValue(TW_BACKUP_SDEXT_SIZE, backup_display_size);
-                LOGINFO("done");
-                LOGINFO("checking whether Backup_Size is == 0");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("checking whether Backup_Size is == 0"));
                 if ((*iter)->Backup_Size == 0) {
-                    LOGINFO("yes");
-                    LOGINFO("setting TW_HAS_SDEXT_PARTITION to false");
+                    gui_msg(Msg("yes"));
+                    gui_msg(Msg("setting TW_HAS_SDEXT_PARTITION to false"));
                     DataManager::SetValue(TW_HAS_SDEXT_PARTITION, 0);
-                    LOGINFO("done");
-                    LOGINFO("setting TW_BACKUP_SDEXT_VAR to false");
+                    gui_msg(Msg("done"));
+                    gui_msg(Msg("setting TW_BACKUP_SDEXT_VAR to false"));
                     DataManager::SetValue(TW_BACKUP_SDEXT_VAR, 0);
-                    LOGINFO("done");
+                    gui_msg(Msg("done"));
                 } else {
-                    LOGINFO("no");
-                    LOGINFO("setting TW_HAS_SDEXT_PARTITION to true");
+                    gui_msg(Msg("no"));
+                    gui_msg(Msg("setting TW_HAS_SDEXT_PARTITION to true"));
                     DataManager::SetValue(TW_HAS_SDEXT_PARTITION, 1);
-                    LOGINFO("done");
+                    gui_msg(Msg("done"));
                 }
             } else if ((*iter)->Has_Android_Secure) {
-                LOGINFO("Has_Android_Secure");
-                LOGINFO("calculating backup display size");
+                gui_msg(Msg("Has_Android_Secure"));
+                gui_msg(Msg("calculating backup display size"));
                 int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-                LOGINFO("done");
-                LOGINFO("setting backup andsec size");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("setting backup andsec size"));
                 DataManager::SetValue(TW_BACKUP_ANDSEC_SIZE, backup_display_size);
-                LOGINFO("done");
-                LOGINFO("checking whether Backup_Size is == 0");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("checking whether Backup_Size is == 0"));
                 if ((*iter)->Backup_Size == 0) {
-                    LOGINFO("yes");
-                    LOGINFO("setting TW_HAS_ANDROID_SECURE to false");
+                    gui_msg(Msg("yes"));
+                    gui_msg(Msg("setting TW_HAS_ANDROID_SECURE to false"));
                     DataManager::SetValue(TW_HAS_ANDROID_SECURE, 0);
-                    LOGINFO("done");
-                    LOGINFO("setting TW_BACKUP_ANDSEC_VAR to false");
+                    gui_msg(Msg("done"));
+                    gui_msg(Msg("setting TW_BACKUP_ANDSEC_VAR to false"));
                     DataManager::SetValue(TW_BACKUP_ANDSEC_VAR, 0);
-                    LOGINFO("done");
+                    gui_msg(Msg("done"));
                 } else {
-                    LOGINFO("no");
-                    LOGINFO("setting TW_HAS_ANDROID_SECURE to true");
+                    gui_msg(Msg("no"));
+                    gui_msg(Msg("setting TW_HAS_ANDROID_SECURE to true"));
                     DataManager::SetValue(TW_HAS_ANDROID_SECURE, 1);
-                    LOGINFO("done");
+                    gui_msg(Msg("done"));
                 }
             } else if ((*iter)->Mount_Point == "/boot") {
-                LOGINFO("/boot");
-                LOGINFO("calculating backup display size");
+                gui_msg(Msg("/boot"));
+                gui_msg(Msg("calculating backup display size"));
                 int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-                LOGINFO("done");
-                LOGINFO("setting backup boot size");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("setting backup boot size"));
                 DataManager::SetValue(TW_BACKUP_BOOT_SIZE, backup_display_size);
-                LOGINFO("done");
-                LOGINFO("checking whether Backup_Size is == 0");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("checking whether Backup_Size is == 0"));
                 if ((*iter)->Backup_Size == 0) {
-                    LOGINFO("yes");
-                    LOGINFO("setting tw_has_boot_partition to false");
+                    gui_msg(Msg("yes"));
+                    gui_msg(Msg("setting tw_has_boot_partition to false"));
                     DataManager::SetValue("tw_has_boot_partition", 0);
-                    LOGINFO("done");
-                    LOGINFO("setting TW_BACKUP_BOOT_VAR to false");
+                    gui_msg(Msg("done"));
+                    gui_msg(Msg("setting TW_BACKUP_BOOT_VAR to false"));
                     DataManager::SetValue(TW_BACKUP_BOOT_VAR, 0);
-                    LOGINFO("done");
+                    gui_msg(Msg("done"));
                 } else {
-                    LOGINFO("no");
-                    LOGINFO("setting tw_has_boot_partition to true");
+                    gui_msg(Msg("no"));
+                    gui_msg(Msg("setting tw_has_boot_partition to true"));
                     DataManager::SetValue("tw_has_boot_partition", 1);
-                    LOGINFO("done");
+                    gui_msg(Msg("done"));
                 }
             }
         } else {
             // Handle unmountable partitions in case we reset defaults
-            LOGINFO("no");
-            LOGINFO("where am i right now?");
+            gui_msg(Msg("no"));
+            gui_msg(Msg("where am i right now?"));
             if ((*iter)->Mount_Point == "/boot") {
-                LOGINFO("/boot");
-                LOGINFO("calculating backup display size");
+                gui_msg(Msg("/boot"));
+                gui_msg(Msg("calculating backup display size"));
                 int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-                LOGINFO("done");
-                LOGINFO("setting backup boot size");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("setting backup boot size"));
                 DataManager::SetValue(TW_BACKUP_BOOT_SIZE, backup_display_size);
-                LOGINFO("done");
-                LOGINFO("checking whether Backup_Size is == 0");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("checking whether Backup_Size is == 0"));
                 if ((*iter)->Backup_Size == 0) {
-                    LOGINFO("yes");
-                    LOGINFO("setting TW_HAS_BOOT_PARTITION to false");
+                    gui_msg(Msg("yes"));
+                    gui_msg(Msg("setting TW_HAS_BOOT_PARTITION to false"));
                     DataManager::SetValue(TW_HAS_BOOT_PARTITION, 0);
-                    LOGINFO("done");
-                    LOGINFO("setting TW_BACKUP_BOOT_VAR to false");
+                    gui_msg(Msg("done"));
+                    gui_msg(Msg("setting TW_BACKUP_BOOT_VAR to false"));
                     DataManager::SetValue(TW_BACKUP_BOOT_VAR, 0);
-                    LOGINFO("done");
+                    gui_msg(Msg("done"));
                 } else {
-                    LOGINFO("no");
-                    LOGINFO("setting TW_HAS_BOOT_PARTITION to true");
+                    gui_msg(Msg("no"));
+                    gui_msg(Msg("setting TW_HAS_BOOT_PARTITION to true"));
                     DataManager::SetValue(TW_HAS_BOOT_PARTITION, 1);
-                    LOGINFO("done");
+                    gui_msg(Msg("done"));
                 }
             } else if ((*iter)->Mount_Point == "/recovery") {
-                LOGINFO("/recovery");
-                LOGINFO("calculating backup display size");
+                gui_msg(Msg("/recovery"));
+                gui_msg(Msg("calculating backup display size"));
                 int backup_display_size = (int)((*iter)->Backup_Size / 1048576LLU);
-                LOGINFO("done");
-                LOGINFO("setting backup recovery size");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("setting backup recovery size"));
                 DataManager::SetValue(TW_BACKUP_RECOVERY_SIZE, backup_display_size);
-                LOGINFO("done");
-                LOGINFO("checking whether Backup_Size is == 0");
+                gui_msg(Msg("done"));
+                gui_msg(Msg("checking whether Backup_Size is == 0"));
                 if ((*iter)->Backup_Size == 0) {
-                    LOGINFO("yes");
-                    LOGINFO("setting TW_HAS_RECOVERY_PARTITION to false");
+                    gui_msg(Msg("yes"));
+                    gui_msg(Msg("setting TW_HAS_RECOVERY_PARTITION to false"));
                     DataManager::SetValue(TW_HAS_RECOVERY_PARTITION, 0);
-                    LOGINFO("done");
-                    LOGINFO("setting TW_BACKUP_RECOVERY_VAR to false");
+                    gui_msg(Msg("done"));
+                    gui_msg(Msg("setting TW_BACKUP_RECOVERY_VAR to false"));
                     DataManager::SetValue(TW_BACKUP_RECOVERY_VAR, 0);
-                    LOGINFO("done");
+                    gui_msg(Msg("done"));
                 } else {
-                    LOGINFO("no");
-                    LOGINFO("setting TW_HAS_RECOVERY_PARTITION to true");
+                    gui_msg(Msg("no"));
+                    gui_msg(Msg("setting TW_HAS_RECOVERY_PARTITION to true"));
                     DataManager::SetValue(TW_HAS_RECOVERY_PARTITION, 1);
-                    LOGINFO("done");
+                    gui_msg(Msg("done"));
                 }
             } else if ((*iter)->Mount_Point == "/data") {
-                LOGINFO("/data");
-                LOGINFO("calculating data size");
+                gui_msg(Msg("/data"));
+                gui_msg(Msg("calculating data size"));
                 data_size += (int)((*iter)->Backup_Size / 1048576LLU);
-                LOGINFO("done");
+                gui_msg(Msg("done"));
             }
         }
     }
